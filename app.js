@@ -47,7 +47,7 @@ window.addEventListener('load', function() {
        constructor(width, height) {
           this.width = width;
           this.height = height;
-          this.pplayer = new Player(this)
+          this.player = new Player(this)
        }
        update() {
           this.player.update();
@@ -58,4 +58,12 @@ window.addEventListener('load', function() {
     }
 
     const game = new Game(canvas.width, canvas.height)
+      //animation loop
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        game.update();
+        game.draw(ctx);
+        requestAnimationFrame(animate);
+    }
+    animate()
 })
