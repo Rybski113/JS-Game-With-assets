@@ -43,7 +43,7 @@ window.addEventListener('load', function() {
             if (this.x > this.game.width * 0.8) this.markedForDeletion = true;
         }
         draw(context) {
-            context.fillStyle = 'yellow';
+            context.fillStyle = 'white';
             context.fillRect(this.x, this.y, this.width, this.height);
         }
     }
@@ -74,15 +74,17 @@ window.addEventListener('load', function() {
             this.projectiles = this.projectiles.filter(projectile => !projectile.markedForDeletion);
         }
         draw(context) {
-          context.fillStyle = "green";
+          context.fillStyle = "black";
           context.fillRect(this.x, this.y, this.width, this.height);
           this.projectiles.forEach(projectile => {
             projectile.draw(context);
           })
         }
         shootTop() {
-            this.projectiles.push(new Projectile(this.game, this.x, this.y));
-            console.log(this.projectiles);
+            if (this.game.ammo > 0){
+            this.projectiles.push(new Projectile(this.game, this.x + 80, this.y + 30));
+            this.game.ammo --;
+            }
         }
     }
     class Enemy {
@@ -95,7 +97,19 @@ window.addEventListener('load', function() {
 
     }
     class UI {
-
+         constructor(game){
+            this.game = game;
+            this.fontSize = 25;
+            this.fontFamily = 'Helvetica';
+            this.color = 'white';
+         }
+         draw(context){
+            //ammo
+            context.fillStyle = this.color;
+            for (let i = 0; i < this.game.ammo; i++){
+                context.fillRect(20 + 5 * i, 50, 3, 20);
+            }
+         }
     }
     class Game {
        constructor(width, height) {
@@ -103,6 +117,7 @@ window.addEventListener('load', function() {
           this.height = height;
           this.player = new Player(this)
           this.input = new Inputhandler(this);
+          this.ui = new UI(this);
           this.keys = [];
           this.ammo = 20;
           this.maxAmmo = 50;
@@ -112,7 +127,7 @@ window.addEventListener('load', function() {
        update(deltaTime) {
           this.player.update();
           if (this.ammoTimer > this.ammoInterval){
-            if(this.ammo < this.maxAmmo)  this.ammo ++;
+            if(this.ammo < this.maxAmmo) this.ammo ++;
             this.ammoTimer = 0;
           } else {
             this.ammoTimer += deltaTime;
@@ -120,6 +135,7 @@ window.addEventListener('load', function() {
        }
        draw(context) {
           this.player.draw(context);
+          this.ui.draw(context);
        }
     }
 
@@ -128,10 +144,9 @@ window.addEventListener('load', function() {
       //animation loop
     function animate(timeStamp) {
         const deltaTime = timeStamp - lastTime;
-        //console.log(deltaTime)
         lastTime = timeStamp;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        game.update();
+        game.update(deltaTime);
         game.draw(ctx);
         requestAnimationFrame(animate);
     }
