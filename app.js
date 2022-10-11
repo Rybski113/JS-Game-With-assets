@@ -233,8 +233,8 @@ window.addEventListener('load', function() {
     class UI {
          constructor(game){
             this.game = game;
-            this.fontSize = 25;
-            this.fontFamily = 'Helvetica';
+            this.fontSize = 30;
+            this.fontFamily = 'Bangers';
             this.color = 'white';
          }
          draw(context){
