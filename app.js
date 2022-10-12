@@ -76,6 +76,9 @@ window.addEventListener('load', function() {
             else if (this.game.keys.includes('ArrowDown')) this.speedY = this.maxSpeed;
             else this.speedY = 0;
             this.y += this.speedY;
+            // vertical boundaries
+            if (this.y > this.game.height - this.height * 0.5) this.y = this.game.height - this.height * 0.5;
+            else if(this.y < -this.height * 0.5) this.y = -this.height * 0.5;
             // handle projectiles
             this.projectiles.forEach(projectile => {
                 projectile.update();
@@ -150,8 +153,11 @@ window.addEventListener('load', function() {
         if(this.game.debug)
         context.strokeRect(this.x, this.y, this.width, this.height);
         context.drawImage(this.image, this.frameX * this.width, this.frameY * this.height, this.width, this.height, this.x, this.y, this.width, this.height)
-        context.font = '30px Bangers';
-        context.fillText(this.lives, this.x, this.y)
+        if(this.game.debug) {
+            context.font = '30px Bangers';
+            context.fillText(this.lives, this.x, this.y)
+        }
+        
        }
     }
     class Angler1 extends Enemy {
@@ -256,15 +262,15 @@ window.addEventListener('load', function() {
                 let message1;
                 let message2;
                 if (this.game.score > this.game.winningScore) {
-                    message1 = 'You Win!';
-                    message2 = 'Well Done';
+                    message1 = 'Fearsome!';
+                    message2 = 'Well Done Explorer!';
                 } else {
-                    message1 = 'You Lose!';
-                    message2 = 'Try Again Next Time!';
+                    message1 = 'Not again!';
+                    message2 = 'get repair kit and try again!';
                 }
-                context.font = '50px' + this.fontFamily;
+                context.font = '60px' + this.fontFamily;
                 context.fillText(message1, this.game.width * 0.5, this.game.height * 0.5 - 40);
-                context.font = '25px' + this.fontFamily;
+                context.font = '30px' + this.fontFamily;
                 context.fillText(message2, this.game.width * 0.5, this.game.height * 0.5 + 40);
             }
             //ammo
