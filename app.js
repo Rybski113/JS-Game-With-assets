@@ -51,7 +51,7 @@ window.addEventListener('load', function() {
     }
     
     class Particle {
-
+        
     }
     class Player {
         constructor(game) {
